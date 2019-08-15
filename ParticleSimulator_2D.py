@@ -16,3 +16,15 @@ class Particle:
 		self.position = position  # The position is a list [x, y]; position is measured in pixels
 		self.acceleration = acceleration  # Acceleration is a list [x, y] measured in pixels
 		self.velocity = velocity  # Same as Acceleration, but the actual velocity component
+
+
+def calculate_forces_between_p_and_n():
+	return None  # temp
+
+
+def calculate_forces_between_p_and_e():
+	return None  # Temp
+
+
+def calculate_forces_between_e_and_n():
+	return None
