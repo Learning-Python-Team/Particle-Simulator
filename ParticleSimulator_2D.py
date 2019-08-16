@@ -13,13 +13,16 @@ from ImportantMathForCode import *
 
 start = t.time()
 
-number_of_bodies = 5
-size_of_window = 100, 100
+number_of_bodies = 100
+size_of_window = 500, 500
 
 Colors = {
 	'White': (255, 255, 255),
 	'Black': (0, 0, 0),
 	'Blue': (109, 196, 255),
+	'p': (255, 0, 255),
+	'e': (255, 255, 0),
+	'n': (255, 255, 255)
 	}  # (Red, Green, Blue) color values from 0 to 255
 
 
@@ -31,7 +34,7 @@ class Particle:
 		self.velocity = velocity  # Same as Acceleration, but the actual velocity component
 		
 		p_type_string = str(particle_type)
-		self.mass = particle_mass[p_type_string]
+		self.mass = float(particle_mass[p_type_string]) * mass_modifier
 
 
 def calculate_forces_between_p_and_n():
@@ -67,17 +70,17 @@ particles = []
 for i in range(number_of_bodies):
 	particle_type_int = random.randint(-1, 2)
 	particle_type = str(possible_particle_type[particle_type_int])
-	pos_x = random.randint(4, (size_of_window[0] - 5))
-	pos_y = random.randint(4, (size_of_window[1] - 5))
+	pos_x = random.randint(9, (size_of_window[0] - 10))
+	pos_y = random.randint(9, (size_of_window[1] - 10))
 	
 	particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
 
 pygame.init()
 screen = pygame.display.set_mode(size_of_window)
 
-font = pygame.font.SysFont('Arial', 16)
-text = font.render('0', True, Colors['Blue'])
-textRect = text.get_rect()
+font = pygame.font.SysFont('Arial', 20)
+# text = font.render('0', True, Colors['Blue'])
+# textRect = text.get_rect()
 simulator_on = 0
 while simulator_on == 0:
 	for event in pygame.event.get():
@@ -114,13 +117,21 @@ while simulator_on == 0:
 		a_pos[0] = a_pos[0] + a_vel[0]
 		a_pos[1] = a_pos[1] + a_vel[1]
 		
-		mass_text = 'M={0}'.format(a_mass)
-		text = font.render(mass_text, True, Colors['Blue'])
-		textRect.center = (a_pos[0] + a_mass + 10, a_pos[1] + a_mass + 10)
+		# mass_text = 'M={0}'.format(a_mass)
+		# text = font.render(mass_text, True, Colors['Blue'])
+		# textRect.center = (a_pos[0] + 10, a_pos[1] + 10)
 		
-		screen.blit(text, textRect)
+		# screen.blit(text, textRect)
 		
-		pygame.draw.rect(screen, Colors['White'], pygame.Rect(a_pos[0], a_pos[1], a_mass, a_mass))
+		size_of_blip = 0
+		if a_type == 'p':
+			size_of_blip += 10
+		elif a_type == 'n':
+			size_of_blip += 10
+		else:
+			size_of_blip += 3
+		
+		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_pos[0], a_pos[1], size_of_blip, size_of_blip))
 	
 	pygame.display.flip()
 	print('Time since start: ' + str(t.time() - start))
