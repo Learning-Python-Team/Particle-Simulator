@@ -79,8 +79,8 @@ pygame.init()
 screen = pygame.display.set_mode(size_of_window)
 
 font = pygame.font.SysFont('Arial', 20)
-# text = font.render('0', True, Colors['Blue'])
-# textRect = text.get_rect()
+text = font.render('0', True, Colors['Blue'])
+textRect = text.get_rect()
 simulator_on = 0
 while simulator_on == 0:
 	for event in pygame.event.get():
@@ -117,11 +117,11 @@ while simulator_on == 0:
 		a_pos[0] = a_pos[0] + a_vel[0]
 		a_pos[1] = a_pos[1] + a_vel[1]
 		
-		# mass_text = 'M={0}'.format(a_mass)
-		# text = font.render(mass_text, True, Colors['Blue'])
-		# textRect.center = (a_pos[0] + 10, a_pos[1] + 10)
+		velocity_text = 'V=({},{})'.format(a_vel[0].__round__(3), a_vel[1].__round__(3))
+		text = font.render(velocity_text, True, Colors['Blue'])
+		textRect.center = (a_pos[0] + 10, a_pos[1] + 10)
 		
-		# screen.blit(text, textRect)
+		screen.blit(text, textRect)
 		
 		size_of_blip = 0
 		if a_type == 'p':
