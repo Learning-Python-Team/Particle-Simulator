@@ -53,7 +53,7 @@ def gravity(a_pos, a_mass, b_pos, b_mass):
 	sin = x_diff / hypotenuse
 	cos = y_diff / hypotenuse
 	
-	f = (G * a_mass * b_mass) / (hypotenuse ** 2)
+	f = (constant_G * a_mass * b_mass) / (hypotenuse ** 2)
 	
 	fx = f * sin
 	fy = f * cos
@@ -88,7 +88,7 @@ while simulator_on == 0:
 		a_type = particle_a.ptype
 		a_pos = particle_a.position
 		a_accel = particle_a.acceleration
-		a_velo = particle_a.velocity
+		a_vel = particle_a.velocity
 		a_mass = particle_a.mass
 		
 		fx_total = 0
@@ -100,27 +100,27 @@ while simulator_on == 0:
 			b_mass = particle_b.mass
 			if b_pos == a_pos:
 				continue
-			fx, fy = 0, 0
-			if a_type == 'p':
-				if b_type == 'p':
-				
-				if b_type == 'e':
-				
-				if b_type == 'n':
 			
-			if a_type == 'e':
-				if b_type == 'p':
-				
-				if b_type == 'e':
-				
-				if b_type == 'n':
-				
-			if a_type == 'n':
-				if b_type == 'p':
-				
-				if b_type == 'e':
-				
-				if b_type == 'n':
-				
+			fx, fy = gravity(a_pos, a_mass, b_pos, b_mass)
 			fx_total += fx
 			fy_total += fy
+		
+		a_accel[0] = fx_total / a_mass
+		a_accel[1] = fy_total / a_mass
+		
+		a_vel[0] = a_vel[0] + a_accel[0]
+		a_vel[1] = a_vel[1] + a_accel[1]
+		
+		a_pos[0] = a_pos[0] + a_vel[0]
+		a_pos[1] = a_pos[1] + a_vel[1]
+		
+		mass_text = 'M={0}'.format(a_mass)
+		text = font.render(mass_text, True, Colors['Blue'])
+		textRect.center = (a_pos[0] + a_mass + 10, a_pos[1] + a_mass + 10)
+		
+		screen.blit(text, textRect)
+		
+		pygame.draw.rect(screen, Colors['White'], pygame.Rect(a_pos[0], a_pos[1], a_mass, a_mass))
+	
+	pygame.display.flip()
+	print('Time since start: ' + str(t.time() - start))
