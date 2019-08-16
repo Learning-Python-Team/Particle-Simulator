@@ -102,12 +102,25 @@ while simulator_on == 0:
 				continue
 			fx, fy = 0, 0
 			if a_type == 'p':
+				if b_type == 'p':
+				
 				if b_type == 'e':
 				
 				if b_type == 'n':
+			
 			if a_type == 'e':
-			
+				if b_type == 'p':
+				
+				if b_type == 'e':
+				
+				if b_type == 'n':
+				
 			if a_type == 'n':
-			
+				if b_type == 'p':
+				
+				if b_type == 'e':
+				
+				if b_type == 'n':
+				
 			fx_total += fx
 			fy_total += fy
