@@ -3,12 +3,13 @@
 # https://github.com/anishsatalkar/python_gravity_simulation_pygame/blob/master/gravity_simulation.py
 
 
-import random
-import time as t
 import math as m
-import numpy
+import random
 import sys
+import time as t
+
 import pygame
+
 from ImportantMathForCode import *
 
 start = t.time()
@@ -82,10 +83,12 @@ font = pygame.font.SysFont('Arial', 20)
 text = font.render('0', True, Colors['Blue'])
 textRect = text.get_rect()
 simulator_on = 0
-while simulator_on == 0:
+while True:
+	in_t = t.time()
+	screen.fill(Colors['Black'])
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			simulator_on += 1
+			sys.exit()
 	
 	for particle_a in particles:
 		a_type = particle_a.ptype
