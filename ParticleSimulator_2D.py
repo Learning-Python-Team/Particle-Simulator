@@ -6,12 +6,13 @@
 import random
 import time
 import math
+import numpy
 import sys
 import pygame
 from Particle_masses import *
 
-number_of_bodies = None
-size_of_window = [None, None]
+number_of_bodies = 5
+size_of_window = [100, 100]
 
 Colors = {
 	'White': (255, 255, 255),
@@ -41,3 +42,15 @@ def calculate_forces_between_p_and_e():
 
 def calculate_forces_between_e_and_n():
 	return None
+
+
+posible_particle_type = ('p', 'e', 'n')
+
+particles = []
+for i in range(number_of_bodies):
+	particle_type_int = random.randint(-1, 2)
+	particle_type = str(posible_particle_type[particle_type_int])
+	pos_x = random.randint(4, (size_of_window[0] - 5))
+	pos_y = random.randint(4, (size_of_window[1] - 5))
+	
+	particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
