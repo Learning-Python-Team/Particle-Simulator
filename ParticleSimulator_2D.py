@@ -10,12 +10,11 @@ import time as t
 
 import pygame
 
-from ImportantMathForCode import *
+from Settings import *
 
 start = t.time()
 
-number_of_bodies = 100
-size_of_window = 500, 500
+
 
 Colors = {
 	'White': (255, 255, 255),
@@ -35,7 +34,7 @@ class Particle:
 		self.velocity = velocity  # Same as Acceleration, but the actual velocity component
 		
 		p_type_string = str(particle_type)
-		self.mass = float(particle_mass[p_type_string]) * mass_modifier
+		self.mass = float(particle_mass[p_type_string]) * modifier_10
 
 
 def calculate_forces_between_p_and_n():
@@ -92,9 +91,9 @@ while True:
 	
 	for particle_a in particles:
 		a_type = particle_a.ptype
-		a_pos = particle_a.position
-		a_accel = particle_a.acceleration
-		a_vel = particle_a.velocity
+		a_position = particle_a.position
+		a_acceleration = particle_a.acceleration
+		a_velocity = particle_a.velocity
 		a_mass = particle_a.mass
 		
 		fx_total = 0
@@ -102,27 +101,44 @@ while True:
 		
 		for particle_b in particles:
 			b_type = particle_b.ptype
-			b_pos = particle_b.position
+			b_position = particle_b.position
 			b_mass = particle_b.mass
-			if b_pos == a_pos:
+			if b_position == a_position:
 				continue
 			
-			fx, fy = gravity(a_pos, a_mass, b_pos, b_mass)
+			fx, fy = gravity(a_position, a_mass, b_position, b_mass)
 			fx_total += fx
 			fy_total += fy
 		
-		a_accel[0] = fx_total / a_mass
-		a_accel[1] = fy_total / a_mass
+		a_acceleration[0] = fx_total / a_mass
+		a_acceleration[1] = fy_total / a_mass
 		
-		a_vel[0] = a_vel[0] + a_accel[0]
-		a_vel[1] = a_vel[1] + a_accel[1]
+		a_velocity[0] = a_velocity[0] + a_acceleration[0]
+		a_velocity[1] = a_velocity[1] + a_acceleration[1]
 		
-		a_pos[0] = a_pos[0] + a_vel[0]
-		a_pos[1] = a_pos[1] + a_vel[1]
+		a_position[0] = a_position[0] + a_velocity[0]
+		a_position[1] = a_position[1] + a_velocity[1]
 		
-		velocity_text = 'V=({},{})'.format(a_vel[0].__round__(3), a_vel[1].__round__(3))
+		# Prevent blocks from going of screen
+		if a_position[0] < 0:
+			a_position[0] *= 0
+			a_velocity[0] *= -1
+		elif a_position[0] > size_of_window[0]:
+			a_position[0] *= 0
+			a_position[0] += size_of_window[0]
+			a_velocity[0] *= -1
+		if a_position[1] < 0:
+			a_position[1] *= 0
+			a_velocity[1] *= -1
+		elif a_position[1] > size_of_window[1]:
+			a_position[1] *= 0
+			a_position[1] += size_of_window[1]
+			a_velocity[1] *= -1
+		# /Prevent blocks from going of screen
+		
+		velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
 		text = font.render(velocity_text, True, Colors['Blue'])
-		textRect.center = (a_pos[0] + 10, a_pos[1] + 10)
+		textRect.center = (a_position[0] + 10, a_position[1] + 10)
 		
 		screen.blit(text, textRect)
 		
@@ -134,7 +150,7 @@ while True:
 		else:
 			size_of_blip += 3
 		
-		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_pos[0], a_pos[1], size_of_blip, size_of_blip))
+		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_position[0], a_position[1], size_of_blip, size_of_blip))
 	
 	pygame.display.flip()
 	print('Time since start: ' + str(t.time() - start))
