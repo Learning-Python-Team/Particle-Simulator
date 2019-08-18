@@ -83,6 +83,9 @@ text = font.render('0', True, Colors['Blue'])
 textRect = text.get_rect()
 simulator_on = 0
 simulation_clock = pygame.time.Clock()
+max_fps = 120
+framerate = 60
+debug = False
 while True:
 	simulation_clock.tick(framerate)
 	in_t = t.time()
@@ -153,6 +156,12 @@ while True:
 			size_of_blip += 3
 		
 		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_position[0], a_position[1], size_of_blip, size_of_blip))
+
+	fps = f'FPS: {simulation_clock.get_fps():05.2f}, Goal: {framerate}'
+	text = font.render(fps, True, Colors['Blue'])
+	textRect.topleft = (0, 0)
+	screen.blit(text, textRect)
+	screen.blit(f_text, f_textRect)
 	
 	pygame.display.flip()
 	print('Time since start: ' + str(t.time() - start))
