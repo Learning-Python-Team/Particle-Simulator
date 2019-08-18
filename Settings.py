@@ -1,9 +1,9 @@
 # Settings
 
-number_of_bodies = 10
-size_of_window = 700, 700
+number_of_bodies = 2
+size_of_window = 50, 50
 
-modifier_scale = 5e12
+modifier_scale = 4.5e12
 modifier_slow_velocity = 0
 
 particle_mass = {

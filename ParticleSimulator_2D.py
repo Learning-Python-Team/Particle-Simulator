@@ -33,15 +33,22 @@ class Particle:
 		self.mass = float(particle_mass[p_type_string]) * modifier_scale
 
 
-possible_particle_type = ('p', 'e', 'n')
+possible_particle_type = ('p')  # , 'e', 'n')
 
 particles = []
-for i in range(number_of_bodies):
-	particle_type = str(random.choice(possible_particle_type))
-	pos_x = random.randint(19, (size_of_window[0] - 20))
-	pos_y = random.randint(19, (size_of_window[1] - 20))
-	
-	particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
+make_particles_auto = False
+if make_particles_auto is True:
+	for i in range(number_of_bodies):
+		particle_type = str(random.choice(possible_particle_type))
+		pos_x = random.randint(19, (size_of_window[0] - 20))
+		pos_y = random.randint(19, (size_of_window[1] - 20))
+		
+		particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
+
+# Test particles
+particles.append(Particle('p', [20, 20], [0, 0], [0, 0]))
+particles.append(Particle('p', [size_of_window[0] - 20, size_of_window[1] - 20], [0, 0], [0, 0]))
+# /Test particles
 
 pygame.init()
 screen = pygame.display.set_mode(size_of_window)
@@ -103,11 +110,13 @@ while True:
 			b_mass = particle_b.mass
 			if b_position == a_position:
 				continue
-			
+			force = [0, 0]
 			# Gravity function
-			force = calculate_gravity(a_position, a_mass, b_position, b_mass)
+			force = calculate_gravity(force, a_position, a_mass, b_position, b_mass)
 			# Electromagnetic Function
 			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
+			# Strong Nuclear Force Function
+			
 			
 			fx_total += force[0]
 			fy_total += force[1]
@@ -146,15 +155,14 @@ while True:
 			a_velocity[1] *= -1
 		# /Prevent blocks from going of screen
 		
+		# Velocity text
 		if debug:
 			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
-			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
 			text = font.render(velocity_text, True, Colors['Blue'])
-			text = font.render(velocity_text, True, Colors['Blue'])
-			textRect.center = (a_position[0] + 10, a_position[1] + 10)
 			textRect.center = (a_position[0] + 10, a_position[1] + 10)
 			
 			screen.blit(text, textRect)
+		# /Velocity text
 
 		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_position[0], a_position[1], size_of_blip, size_of_blip))
 	
