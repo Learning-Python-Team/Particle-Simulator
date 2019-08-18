@@ -10,10 +10,9 @@ import time as t
 
 import pygame
 
-from Settings import *
+from FundamentalForces import *
 
 start = t.time()
-
 
 Colors = {
 	'White': (255, 255, 255),
@@ -36,54 +35,13 @@ class Particle:
 		self.mass = float(particle_mass[p_type_string]) * modifier_10
 
 
-def calculate_gravity(a_pos, a_mass, b_pos, b_mass):
-	x_diff = b_pos[0] - a_pos[0]
-	y_diff = b_pos[1] - a_pos[1]
-	hypotenuse = m.sqrt((x_diff ** 2) + (y_diff ** 2))
-	sin = x_diff / hypotenuse
-	cos = y_diff / hypotenuse
-	
-	f = (constant_G * a_mass * b_mass) / (hypotenuse ** 2)
-	
-	fx = f * sin
-	fy = f * cos
-	
-	return [fx, fy]
-
-
-def calculate_electromagnetic(forces_list, a_pos, b_pos, a_mass, b_mass, a_type, b_type):
-	x_diff = b_pos[0] - a_pos[0]
-	y_diff = b_pos[1] - a_pos[1]
-	
-	if a_type == 'p':
-		a_mass *= 1
-	elif a_type == 'e':
-		a_mass *= -1
-	else:
-		return forces_list
-	
-	if b_type == 'p':
-		b_mass *= 1
-	elif b_type == 'e':
-		b_mass *= -1
-	else:
-		return forces_list
-	
-	fx = -(constant_coulombs_constant * ((a_mass * b_mass) / (x_diff ** 2))) + forces_list[0]
-	fy = -(constant_coulombs_constant * ((a_mass * b_mass) / (y_diff ** 2))) + forces_list[1]
-	
-	return [fx, fy]
-	
-
-
-possible_particle_type = ('p', 'e', 'n')
+possible_particle_type = ('p', 'e')  # , 'n')
 
 particles = []
 for i in range(number_of_bodies):
-	particle_type_int = random.randint(-1, 2)
-	particle_type = str(possible_particle_type[particle_type_int])
-	pos_x = random.randint(9, (size_of_window[0] - 10))
-	pos_y = random.randint(9, (size_of_window[1] - 10))
+	particle_type = str(random.choice(possible_particle_type))
+	pos_x = random.randint(19, (size_of_window[0] - 20))
+	pos_y = random.randint(19, (size_of_window[1] - 20))
 	
 	particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
 
