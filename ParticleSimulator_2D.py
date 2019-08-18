@@ -10,11 +10,9 @@ import time as t
 
 import pygame
 
-from Settings import *
+from FundamentalForces import *
 
 start = t.time()
-
-
 
 Colors = {
 	'White': (255, 255, 255),
@@ -37,41 +35,13 @@ class Particle:
 		self.mass = float(particle_mass[p_type_string]) * modifier_10
 
 
-def calculate_forces_between_p_and_n():
-	return None  # temp
-
-
-def calculate_forces_between_p_and_e():
-	return None  # Temp
-
-
-def calculate_forces_between_e_and_n():
-	return None
-
-
-def gravity(a_pos, a_mass, b_pos, b_mass):
-	x_diff = b_pos[0] - a_pos[0]
-	y_diff = b_pos[1] - a_pos[1]
-	hypotenuse = m.sqrt((x_diff ** 2) + (y_diff ** 2))
-	sin = x_diff / hypotenuse
-	cos = y_diff / hypotenuse
-	
-	f = (constant_G * a_mass * b_mass) / (hypotenuse ** 2)
-	
-	fx = f * sin
-	fy = f * cos
-	
-	return fx, fy
-
-
-possible_particle_type = ('p', 'e', 'n')
+possible_particle_type = ('p', 'e')  # , 'n')
 
 particles = []
 for i in range(number_of_bodies):
-	particle_type_int = random.randint(-1, 2)
-	particle_type = str(possible_particle_type[particle_type_int])
-	pos_x = random.randint(9, (size_of_window[0] - 10))
-	pos_y = random.randint(9, (size_of_window[1] - 10))
+	particle_type = str(random.choice(possible_particle_type))
+	pos_x = random.randint(19, (size_of_window[0] - 20))
+	pos_y = random.randint(19, (size_of_window[1] - 20))
 	
 	particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
 
@@ -133,9 +103,13 @@ while True:
 			if b_position == a_position:
 				continue
 			
-			fx, fy = gravity(a_position, a_mass, b_position, b_mass)
-			fx_total += fx
-			fy_total += fy
+			# Gravity function
+			force = calculate_gravity(a_position, a_mass, b_position, b_mass)
+			# Electromagnetic Function
+			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
+			
+			fx_total += force[0]
+			fy_total += force[1]
 		
 		a_acceleration[0] = fx_total / a_mass
 		a_acceleration[1] = fy_total / a_mass
@@ -146,22 +120,31 @@ while True:
 		a_position[0] = a_position[0] + a_velocity[0]
 		a_position[1] = a_position[1] + a_velocity[1]
 		
+		size_of_blip = 0
+		if a_type == 'p':
+			size_of_blip += 10
+		elif a_type == 'n':
+			size_of_blip += 10
+		else:
+			size_of_blip += 3
+		
 		# Prevent blocks from going of screen
-		if a_position[0] < 0:
+		if a_position[0] < 0:  # Left
 			a_position[0] *= 0
 			a_velocity[0] *= -1
-		elif a_position[0] > size_of_window[0]:
+		elif (a_position[0] + size_of_blip) > size_of_window[0]:  # Right
 			a_position[0] *= 0
-			a_position[0] += size_of_window[0]
+			a_position[0] += (size_of_window[0] - size_of_blip)
 			a_velocity[0] *= -1
-		if a_position[1] < 0:
+		if a_position[1] < 0:  # Top
 			a_position[1] *= 0
 			a_velocity[1] *= -1
-		elif a_position[1] > size_of_window[1]:
+		elif (a_position[1] + size_of_blip) > size_of_window[1]:  # Bottom
 			a_position[1] *= 0
-			a_position[1] += size_of_window[1]
+			a_position[1] += (size_of_window[1] - size_of_blip)
 			a_velocity[1] *= -1
 		# /Prevent blocks from going of screen
+
 		if debug:
 			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
 			text = font.render(velocity_text, True, Colors['Blue'])

@@ -125,3 +125,10 @@ dmypy.json
 # Pyre ptype checker
 .pyre/
 /.idea/
+.idea/.gitignore
+.idea/Chess.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/sonarlint/
+.idea/vcs.xml

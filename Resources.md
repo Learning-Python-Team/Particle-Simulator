@@ -10,3 +10,4 @@ https://github.com/anishsatalkar/python_gravity_simulation_pygame
 
 ## This is a list of math things:
 - https://en.wikipedia.org/wiki/Coulomb%27s_law
+- https://www.youtube.com/watch?v=mpDDQ4uEH6M Strong Nuclear force between protons
