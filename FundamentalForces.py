@@ -1,5 +1,6 @@
 # Equations used in ParticleSimulator_2D.py
 from Settings import *
+import math as m
 
 
 def calculate_gravity(a_pos, a_mass, b_pos, b_mass):
