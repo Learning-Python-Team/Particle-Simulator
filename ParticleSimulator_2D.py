@@ -15,7 +15,6 @@ from Settings import *
 start = t.time()
 
 
-
 Colors = {
 	'White': (255, 255, 255),
 	'Black': (0, 0, 0),
