@@ -1,7 +1,7 @@
 # Settings
 
-number_of_bodies = 200
-size_of_window = 500, 500
+number_of_bodies = 10
+size_of_window = 400, 400
 
 modifier_10 = 17
 modifier_slow_velocity = 0

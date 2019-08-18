@@ -36,19 +36,7 @@ class Particle:
 		self.mass = float(particle_mass[p_type_string]) * modifier_10
 
 
-def calculate_forces_between_p_and_n():
-	return None  # temp
-
-
-def calculate_forces_between_p_and_e():
-	return None  # Temp
-
-
-def calculate_forces_between_e_and_n():
-	return None
-
-
-def gravity(a_pos, a_mass, b_pos, b_mass):
+def calculate_gravity(a_pos, a_mass, b_pos, b_mass):
 	x_diff = b_pos[0] - a_pos[0]
 	y_diff = b_pos[1] - a_pos[1]
 	hypotenuse = m.sqrt((x_diff ** 2) + (y_diff ** 2))
@@ -60,7 +48,32 @@ def gravity(a_pos, a_mass, b_pos, b_mass):
 	fx = f * sin
 	fy = f * cos
 	
-	return fx, fy
+	return [fx, fy]
+
+
+def calculate_electromagnetic(forces_list, a_pos, b_pos, a_mass, b_mass, a_type, b_type):
+	x_diff = b_pos[0] - a_pos[0]
+	y_diff = b_pos[1] - a_pos[1]
+	
+	if a_type == 'p':
+		a_mass *= 1
+	elif a_type == 'e':
+		a_mass *= -1
+	else:
+		return forces_list
+	
+	if b_type == 'p':
+		b_mass *= 1
+	elif b_type == 'e':
+		b_mass *= -1
+	else:
+		return forces_list
+	
+	fx = -(constant_coulombs_constant * ((a_mass * b_mass) / (x_diff ** 2))) + forces_list[0]
+	fy = -(constant_coulombs_constant * ((a_mass * b_mass) / (y_diff ** 2))) + forces_list[1]
+	
+	return [fx, fy]
+	
 
 
 possible_particle_type = ('p', 'e', 'n')
@@ -105,9 +118,13 @@ while True:
 			if b_position == a_position:
 				continue
 			
-			fx, fy = gravity(a_position, a_mass, b_position, b_mass)
-			fx_total += fx
-			fy_total += fy
+			# Gravity function
+			force = calculate_gravity(a_position, a_mass, b_position, b_mass)
+			# Electromagnetic Function
+			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
+			
+			fx_total += force[0]
+			fy_total += force[1]
 		
 		a_acceleration[0] = fx_total / a_mass
 		a_acceleration[1] = fy_total / a_mass
@@ -118,29 +135,6 @@ while True:
 		a_position[0] = a_position[0] + a_velocity[0]
 		a_position[1] = a_position[1] + a_velocity[1]
 		
-		# Prevent blocks from going of screen
-		if a_position[0] < 0:
-			a_position[0] *= 0
-			a_velocity[0] *= -1
-		elif a_position[0] > size_of_window[0]:
-			a_position[0] *= 0
-			a_position[0] += size_of_window[0]
-			a_velocity[0] *= -1
-		if a_position[1] < 0:
-			a_position[1] *= 0
-			a_velocity[1] *= -1
-		elif a_position[1] > size_of_window[1]:
-			a_position[1] *= 0
-			a_position[1] += size_of_window[1]
-			a_velocity[1] *= -1
-		# /Prevent blocks from going of screen
-		
-		velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
-		text = font.render(velocity_text, True, Colors['Blue'])
-		textRect.center = (a_position[0] + 10, a_position[1] + 10)
-		
-		screen.blit(text, textRect)
-		
 		size_of_blip = 0
 		if a_type == 'p':
 			size_of_blip += 10
@@ -148,6 +142,29 @@ while True:
 			size_of_blip += 10
 		else:
 			size_of_blip += 3
+		
+		# Prevent blocks from going of screen
+		if a_position[0] < 0:  # Left
+			a_position[0] *= 0
+			a_velocity[0] *= -1
+		elif (a_position[0] + size_of_blip) > size_of_window[0]:  # Right
+			a_position[0] *= 0
+			a_position[0] += (size_of_window[0] - size_of_blip)
+			a_velocity[0] *= -1
+		if a_position[1] < 0:  # Top
+			a_position[1] *= 0
+			a_velocity[1] *= -1
+		elif (a_position[1] + size_of_blip) > size_of_window[1]:  # Bottom
+			a_position[1] *= 0
+			a_position[1] += (size_of_window[1] - size_of_blip)
+			a_velocity[1] *= -1
+		# /Prevent blocks from going of screen
+		
+		velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(5), a_velocity[1].__round__(5))
+		text = font.render(velocity_text, True, Colors['Blue'])
+		textRect.center = (a_position[0] + 10, a_position[1] + 10)
+		
+		screen.blit(text, textRect)
 		
 		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_position[0], a_position[1], size_of_blip, size_of_blip))
 	
