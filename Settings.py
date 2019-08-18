@@ -13,3 +13,7 @@ particle_mass = {
 	}
 constant_G = 6.674 * (10 ** (-11 + modifier_10))  # m^3 * kg^-1 * s^-2
 constant_coulombs_constant = 8987551787.3681764  # N * m^2 * C^-2
+
+max_fps = 120
+framerate = 60
+debug = False
