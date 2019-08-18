@@ -82,7 +82,9 @@ font = pygame.font.SysFont('Arial', 20)
 text = font.render('0', True, Colors['Blue'])
 textRect = text.get_rect()
 simulator_on = 0
+simulation_clock = pygame.time.Clock()
 while True:
+	simulation_clock.tick(framerate)
 	in_t = t.time()
 	screen.fill(Colors['Black'])
 	for event in pygame.event.get():
