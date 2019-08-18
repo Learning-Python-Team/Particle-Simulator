@@ -51,14 +51,41 @@ screen = pygame.display.set_mode(size_of_window)
 font = pygame.font.SysFont('Arial', 20)
 text = font.render('0', True, Colors['Blue'])
 textRect = text.get_rect()
+footer_font = pygame.font.SysFont('Consolas', 12)
+footer = f'[D]ebug [Q]uit [+]Increase Max Fps [-]Decrease Max Fps'
+f_text = footer_font.render(footer, True, Colors['White'])
+f_textRect = f_text.get_rect()
+f_textRect.bottomleft = (0, size_of_window[0])
 simulator_on = 0
+simulation_clock = pygame.time.Clock()
 while True:
+	simulation_clock.tick(framerate)
 	in_t = t.time()
 	screen.fill(Colors['Black'])
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
-	
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_q:
+				sys.exit()
+			elif event.key in [pygame.K_PLUS, pygame.K_KP_PLUS]:
+				# Increase speed of simulation (capped at 120 fps for now)
+				if framerate < 5:
+					framerate += 1
+				else:
+					framerate = min(max_fps, framerate + 5)
+
+			elif event.key in [pygame.K_MINUS, pygame.K_KP_MINUS]:
+				# Decrease speed of simulation (Capped at 1 fps)
+				if framerate <= 5:
+					framerate = framerate-1 if framerate-1 else 1
+				else:
+					framerate -= 5
+
+			elif event.key == pygame.K_d:
+				# Toggle Debug Text
+				debug = ~debug
+
 	for particle_a in particles:
 		a_type = particle_a.ptype
 		a_position = particle_a.position
@@ -117,14 +144,28 @@ while True:
 			a_position[1] += (size_of_window[1] - size_of_blip)
 			a_velocity[1] *= -1
 		# /Prevent blocks from going of screen
-		
-		velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(5), a_velocity[1].__round__(5))
-		text = font.render(velocity_text, True, Colors['Blue'])
-		textRect.center = (a_position[0] + 10, a_position[1] + 10)
-		
-		screen.blit(text, textRect)
+
+		if debug:
+			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
+			text = font.render(velocity_text, True, Colors['Blue'])
+			textRect.center = (a_position[0] + 10, a_position[1] + 10)
+			screen.blit(text, textRect)
+
+		size_of_blip = 0
+		if a_type == 'p':
+			size_of_blip += 10
+		elif a_type == 'n':
+			size_of_blip += 10
+		else:
+			size_of_blip += 3
 		
 		pygame.draw.rect(screen, Colors[a_type], pygame.Rect(a_position[0], a_position[1], size_of_blip, size_of_blip))
+
+	fps = f'FPS: {simulation_clock.get_fps():05.2f}, Goal: {framerate}'
+	text = font.render(fps, True, Colors['Blue'])
+	textRect.topleft = (0, 0)
+	screen.blit(text, textRect)
+	screen.blit(f_text, f_textRect)
 	
 	pygame.display.flip()
 	print('Time since start: ' + str(t.time() - start))
