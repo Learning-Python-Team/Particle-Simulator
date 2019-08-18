@@ -18,3 +18,13 @@ acceleration = change in velocity / time taken a = v / t
 force = mass x acceleration F = m a
 
 (final velocity)2 – (initial velocity)2 = 2  acceleration  distance v2 – u2 = 2 a s
+
+
+
+Fundermental interaction of particles
+
+                      Gravitation     |   em interaction      |   strong nuclar force     |   weak nuclear force
+
+reach           |     infinite        |       infinite        |       10^-15 to 10^-16 m  |   << 10^-16 m
+relative power  |       10^-41        |         10^-2         |         1                 |         10^-14
+affected        |       all           | charged particles (e-)|  Hardrons ( n, p)        |     Hardrons ans Leptons
