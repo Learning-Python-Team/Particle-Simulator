@@ -24,7 +24,7 @@ Colors = {
 
 class Particle:
 	def __init__(self, particletype, position, acceleration, velocity):
-		self.particletype = particletype  # This determines what kind of particle it is; one of three is the input 'p', 'n', 'e'
+		self.particletype = particletype  # This determines what kind of particle it is
 		self.position = position  # The position is a list [x, y]; position is measured in pixels
 		self.acceleration = acceleration  # Acceleration is a list [x, y] measured in pixels
 		self.velocity = velocity  # Same as Acceleration, but the actual velocity component
@@ -33,11 +33,8 @@ class Particle:
 		self.mass = float(particle_mass[p_type_string]) * modifier_scale
 
 
-possible_particle_type = ('p')  # , 'e', 'n')
-
 particles = []
-make_particles_auto = False
-if make_particles_auto is True:
+if auto_make_particles is True:
 	for i in range(number_of_bodies):
 		particle_type = str(random.choice(possible_particle_type))
 		pos_x = random.randint(19, (size_of_window[0] - 20))
@@ -46,8 +43,8 @@ if make_particles_auto is True:
 		particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
 
 # Test particles
-particles.append(Particle('p', [20, 20], [0, 0], [0, 0]))
-particles.append(Particle('p', [size_of_window[0] - 20, size_of_window[1] - 20], [0, 0], [0, 0]))
+# particles.append(Particle('p', [40, 40], [0, 0], [0, 0]))
+# particles.append(Particle('p', [size_of_window[0] - 40, size_of_window[1] - 40], [0, 0], [0, 0]))
 # /Test particles
 
 pygame.init()
@@ -117,7 +114,6 @@ while True:
 			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
 			# Strong Nuclear Force Function
 			
-			
 			fx_total += force[0]
 			fy_total += force[1]
 		
@@ -126,6 +122,16 @@ while True:
 		
 		a_velocity[0] = a_velocity[0] + a_acceleration[0]
 		a_velocity[1] = a_velocity[1] + a_acceleration[1]
+		
+		# Universal Slowing of particles
+		if Autoslowdown['Slow'] is True:
+			for vel in a_velocity:
+				if vel < (0 - (Autoslowdown['SlowFactor'])):
+					vel += Autoslowdown['SlowFactor']
+				if vel > Autoslowdown['SlowFactor']:
+					vel -= Autoslowdown['SlowFactor']
+		
+		# /Universal Slowing of particles
 		
 		a_position[0] = a_position[0] + a_velocity[0]
 		a_position[1] = a_position[1] + a_velocity[1]
@@ -157,7 +163,7 @@ while True:
 		
 		# Velocity text
 		if debug:
-			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(3), a_velocity[1].__round__(3))
+			velocity_text = 'V=({},{})'.format(a_velocity[0].__round__(5), a_velocity[1].__round__(5))
 			text = font.render(velocity_text, True, Colors['Blue'])
 			textRect.center = (a_position[0] + 10, a_position[1] + 10)
 			

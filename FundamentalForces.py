@@ -4,7 +4,7 @@ import math as m
 
 
 def calculate_gravity(forces_list, a_pos, a_mass, b_pos, b_mass):
-	bypass = False
+	bypass = True
 	if bypass is False:
 		x_diff = b_pos[0] - a_pos[0]
 		y_diff = b_pos[1] - a_pos[1]
@@ -15,7 +15,7 @@ def calculate_gravity(forces_list, a_pos, a_mass, b_pos, b_mass):
 		f = (constant_G * a_mass * b_mass) / (hypotenuse ** 2)
 		
 		forces_list[0] += f * sin
-		forces_list[1] = f * cos
+		forces_list[1] += f * cos
 		
 		return forces_list
 	else:
@@ -24,8 +24,6 @@ def calculate_gravity(forces_list, a_pos, a_mass, b_pos, b_mass):
 
 def calculate_electromagnetic(forces_list, a_pos, b_pos, a_mass, b_mass, a_type, b_type):
 	fx, fy = forces_list
-	if a_type or b_type == 'n':
-		return forces_list
 	
 	x_diff = b_pos[0] - a_pos[0]
 	y_diff = b_pos[1] - a_pos[1]
@@ -36,7 +34,7 @@ def calculate_electromagnetic(forces_list, a_pos, b_pos, a_mass, b_mass, a_type,
 	f = (constant_coulombs_constant * a_mass * b_mass) / (hypotenuse ** 2)
 	
 	if a_type == b_type:
-		fx += (f * sin)
+		fx -= (f * sin)
 		fy -= (f * cos)
 	else:
 		fx += (f * sin)
