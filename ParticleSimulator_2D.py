@@ -39,7 +39,7 @@ if auto_make_particles is True:
 		particle_type = str(random.choice(possible_particle_type))
 		pos_x = random.randint(19, (size_of_window[0] - 20))
 		pos_y = random.randint(19, (size_of_window[1] - 20))
-
+		
 		particles.append(Particle(particle_type, [pos_x, pos_y], [0, 0], [0, 0]))
 
 # Test particles
@@ -97,7 +97,7 @@ while True:
 		a_acceleration = particle_a.acceleration
 		a_velocity = particle_a.velocity
 		a_mass = particle_a.mass
-
+		
 		fx_total = 0
 		fy_total = 0
 		
@@ -109,9 +109,9 @@ while True:
 				continue
 			force = [0, 0]
 			# Gravity function
-			force = calculate_gravity(a_position, a_type, b_position, b_type)
+			force = calculate_gravity(force, a_position, a_mass, b_position, b_mass)
 			# Electromagnetic Function
-			force = calculate_electromagnetic(a_position, a_type, b_position, b_type)
+			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
 			# Strong Nuclear Force Function
 			
 			fx_total += force[0]
