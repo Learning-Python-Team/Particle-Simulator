@@ -109,9 +109,9 @@ while True:
 				continue
 			force = [0, 0]
 			# Gravity function
-			force = calculate_gravity(force, a_position, a_mass, b_position, b_mass)
+			force += calculate_gravity(a_position, a_type, b_position, b_type)
 			# Electromagnetic Function
-			force = calculate_electromagnetic(force, a_position, b_position, a_mass, b_mass, a_type, b_type)
+			force += calculate_electromagnetic(a_position, a_type, b_position, b_type)
 			# Strong Nuclear Force Function
 			
 			fx_total += force[0]
@@ -130,7 +130,6 @@ while True:
 					vel += Autoslowdown['SlowFactor']
 				if vel > Autoslowdown['SlowFactor']:
 					vel -= Autoslowdown['SlowFactor']
-		
 		# /Universal Slowing of particles
 		
 		a_position[0] = a_position[0] + a_velocity[0]

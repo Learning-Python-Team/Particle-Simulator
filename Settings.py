@@ -9,8 +9,7 @@ Autoslowdown = {
 	'SlowFactor': 10
 	}
 
-modifier_scale = 4.5e12
-modifier_slow_velocity = 0
+modifier_scale = 4.5e12 * 100000
 
 particle_mass = {
 	'p': float(1.6726219 * (10 ** (-27)) * modifier_scale),
